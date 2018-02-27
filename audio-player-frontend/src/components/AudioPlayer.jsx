@@ -12,3 +12,5 @@ class AudioPlayer extends Component {
     )
   }
 }
+
+export default AudioPlayer

@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 
 
-class SongDetails extends Component {
-
-
+class Home extends Component {
   render() {
     return (
       <div>
-        SongDetails
+        {this.props.msg}
       </div>
     )
   }
 }
 
-export default SongDetails
+export default Home
