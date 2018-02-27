@@ -6,6 +6,9 @@ import SongDetails from './components/SongDetails';
 import AudioPlayer from './components/AudioPlayer';
 import Home from './components/Home'
 
+import { Grid } from 'semantic-ui-react'
+
+
 class App extends Component {
   constructor() {
     super()
@@ -41,32 +44,39 @@ class App extends Component {
         position: 'absolute',
         bottom: 0,
         height: '30vh',
-        width: '100%'
       }
     }
     return (
-      <div className="App">
-        <header className="App-header">
-          Audio Player
-        </header>
-        <section>
-          <SongList songs={this.props.songs} playSong={this.playSong} />
-        </section>
-        <Route exact path="/" render={() => 
-          <Home msg={'Top Songs...'}/>
-        }/>
-        <Route path='/:songId' render={(props) => 
-          <SongDetails songs={this.props.songs} {...props}/>
-        }/>
-        <footer style={styles.audioPlayer} >
-          <AudioPlayer 
-            song={this.props.songs[this.state.currentSong]} 
-            totalSongs={this.props.songs.length} 
-            isPlaying={this.state.isPlaying}
-            changeSong={this.changeSong}
-            play={this.play} />
-        </footer>
-      </div>
+      <Grid padded className="App"> 
+        <Grid.Row columns={1} >
+          <Grid.Column className="App-header">
+            Audio Player
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row columns={2} >
+          <Grid.Column>
+            <SongList songs={this.props.songs} playSong={this.playSong} />
+          </Grid.Column>
+          <Grid.Column>
+            <Route exact path="/" render={() => 
+              <Home msg={'Top Songs...'}/>
+            }/>
+            <Route path='/:songId' render={(props) => 
+              <SongDetails songs={this.props.songs} {...props}/>
+            }/>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row columns={1} style={styles.audioPlayer} >
+          <Grid.Column>
+            <AudioPlayer 
+              song={this.props.songs[this.state.currentSong]} 
+              totalSongs={this.props.songs.length} 
+              isPlaying={this.state.isPlaying}
+              changeSong={this.changeSong}
+              play={this.play} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     )
   }
 }

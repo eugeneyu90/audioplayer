@@ -10,10 +10,10 @@ class SongList extends Component {
     const songsJSX = songs.map(song => {
       return (
         <List.Item as='a'>
-          <Icon name='right triangle' onClick={() => { this.props.playSong(song.id)} }/>
+          <Icon name='right triangle' onClick={() => { this.props.playSong(song.id)} } style={{display: 'inline'}}/>
           <Link to={'/' + song.id} >
-            <List.Content>
-              <List.Header>{song.title}</List.Header>
+            <List.Content style={{display: 'inline'}} >
+              <List.Header style={{display: 'inline'}} >{song.title}</List.Header>
             </List.Content>
           </Link>
         </List.Item>
