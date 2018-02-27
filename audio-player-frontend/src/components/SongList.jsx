@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
-import { Icon, List } from 'semantic-ui-react'
+import { Grid, Icon, List } from 'semantic-ui-react'
 
 class SongList extends Component {
 
@@ -9,13 +9,21 @@ class SongList extends Component {
     const { songs } = this.props
     const songsJSX = songs.map(song => {
       return (
-        <List.Item as='a'>
-          <Icon name='right triangle' onClick={() => { this.props.playSong(song.id)} } style={{display: 'inline'}}/>
-          <Link to={'/' + song.id} >
-            <List.Content style={{display: 'inline'}} >
-              <List.Header style={{display: 'inline'}} >{song.title}</List.Header>
-            </List.Content>
-          </Link>
+        <List.Item>
+          <Grid columns={2} divided={true} relaxed={false} style={{marginTop: 0, marginBottom: 0}}> 
+            <Grid.Row style={{paddingTop: 0, paddingBottom: 0}}>
+              <Grid.Column>
+                <Icon name='right triangle' onClick={() => { this.props.playSong(song.id)} }/>
+              </Grid.Column>
+              <Grid.Column style={{backgroundColor: 'grey'}}>
+                <Link to={'/' + song.id} >
+                  <List.Content >
+                    <List.Header  >{song.title}</List.Header>
+                  </List.Content>
+                </Link>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </List.Item>
       )
     })

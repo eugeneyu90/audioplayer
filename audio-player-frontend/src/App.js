@@ -47,7 +47,7 @@ class App extends Component {
       }
     }
     return (
-      <Grid padded className="App"> 
+      <Grid padded > 
         <Grid.Row columns={1} >
           <Grid.Column className="App-header">
             Audio Player
