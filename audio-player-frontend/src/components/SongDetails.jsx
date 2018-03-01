@@ -8,7 +8,10 @@ class SongDetails extends Component {
     const { source, title, description, id } = this.props.songs[songId]
     return (
       <div>
-        <div>{`${id} - ${title}`}</div>
+        <div>
+          <button onClick={() => { this.props.playSong(Number(songId))} }>Play</button>
+          {`${id} - ${title}`}
+        </div>
         <div>{description}</div>
         <div>{title}</div>
       </div>

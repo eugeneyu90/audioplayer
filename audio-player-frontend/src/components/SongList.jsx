@@ -9,10 +9,10 @@ class SongList extends Component {
     const { songs } = this.props
     const songsJSX = songs.map(song => {
       return (
-        <List.Item>
+        <List.Item key={song.id}>
           <Grid columns={2} divided={true} relaxed={false} style={{marginTop: 0, marginBottom: 0}}> 
             <Grid.Row style={{paddingTop: 0, paddingBottom: 0}}>
-              <Grid.Column>
+              <Grid.Column width={2}>
                 <Icon name='right triangle' onClick={() => { this.props.playSong(song.id)} }/>
               </Grid.Column>
               <Grid.Column style={{backgroundColor: 'grey'}}>
