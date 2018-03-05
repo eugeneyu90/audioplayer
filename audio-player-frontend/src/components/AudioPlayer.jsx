@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Header, Progress, Icon } from 'semantic-ui-react'
+import jsmediatags from 'jsmediatags'
 
 const PADDING = 14
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -8,8 +9,11 @@ analyser.fftSize = 4096
 const bufferLength = analyser.frequencyBinCount;
 // let dataArray = new Float32Array(bufferLength);
 let dataArray = new Uint8Array(bufferLength);
-
 const fullWidth = window.innerWidth
+let albumArt = new Image()
+let dataUrl = ''
+// Simple API - will fetch all tags
+// var jsmediatags = require("jsmediatags");
 
 class AudioPlayer extends Component {
   constructor() {
@@ -21,21 +25,41 @@ class AudioPlayer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // jsmediatags.read('http://localhost:3000/audiobook1.mp3', {
+    jsmediatags.read('http://localhost:3000'+this.props.song.source, {
+      onSuccess: function(tag) {
+        // console.log(tag)
+        // console.log(tag.tags.picture)
+        albumArt = tag.tags.picture
+        let base64String = "";
+        for (var i = 0; i < albumArt.data.length; i++) {
+            base64String += String.fromCharCode(albumArt.data[i]);
+        }
+        dataUrl = "data:" + albumArt.format + ";base64," + window.btoa(base64String);
+        albumArt.src = dataUrl
+      },
+      onError: function(error) {
+        console.log(':(', error.type, error.info);
+      }
+    })
     if (prevProps.song !== this.props.song) { 
       this.audioPlayer.load()
+      // jsmediatags.read('http://localhost:3000'+this.props.song.source , {
+
     }
     this.props.isPlaying ? this.audioPlayer.play() : this.audioPlayer.pause()
-    // console.log(dataArray)
   }
 
   updatePlayTime = () => {
     this.setState({
       currentTime: this.audioPlayer.currentTime
     })
-    // console.log(this.audioPlayer.currentTime)
   }
 
   updateDuration = (e) => {
+    console.log(this.props.song.source)
+
+    
     this.setState({
       duration: e.target.duration
     })
@@ -56,6 +80,22 @@ class AudioPlayer extends Component {
   }
 
   componentDidMount() {
+    jsmediatags.read('http://localhost:3000'+this.props.song.source, {
+      onSuccess: function(tag) {
+        // console.log(tag)
+        // console.log(tag.tags.picture)
+        albumArt = tag.tags.picture
+        let base64String = "";
+        for (var i = 0; i < albumArt.data.length; i++) {
+            base64String += String.fromCharCode(albumArt.data[i]);
+        }
+        dataUrl = "data:" + albumArt.format + ";base64," + window.btoa(base64String);
+        albumArt.src = dataUrl
+      },
+      onError: function(error) {
+        console.log(':(', error.type, error.info);
+      }
+    })
     let source = audioCtx.createMediaElementSource(this.audioPlayer);
     let gainNode = audioCtx.createGain()
 
@@ -100,13 +140,17 @@ class AudioPlayer extends Component {
   render() {
     const { song, totalSongs, changeSong, isPlaying } = this.props
     const { source, title, description, id } = song
-    // const disablePrev = id-1 < 0 ? true : false
-    // const disableNext = id+1 > totalSongs-1 ? true : false
+
     return (
-      <div style={{width: '100%'}}>
+      <div id="playerContainer" ref={(self) => {this.playerContainer = self}} style={{width: '100%'}}>
         <Header as='h3' textAlign='center'>
           {title}
         </Header>
+
+        {/* {albumArt} */}
+        <div style={{float: 'left', position: 'absolute', left: '10px', top: '10px'}}>
+          <img src={albumArt.src} height="70" ref={(self) => {this.albumArt = self}} />
+        </div>
         <canvas height='20px' ref={(self) => {this.canvas = self}}></canvas>
         <section>
           <Icon circular onClick={() => { changeSong(-1)}} name='step backward' size='large' />
